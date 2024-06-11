@@ -21,6 +21,10 @@ const categorySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    banner: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

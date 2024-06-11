@@ -102,7 +102,6 @@ const signInUser = async (req, res) => {
 
     // checking email entered was valid / registered email or not
     const isEmailValid = await User.findOne({ email });
-    console.log(isEmailValid);
 
     // if email is invalid or not registered
     if (!isEmailValid) {

@@ -17,7 +17,6 @@ const courseSchema = new mongoose.Schema(
     },
     sortBy: {
       type: Number,
-      unique: true,
       required: true,
       default: 10,
     },
@@ -35,6 +34,10 @@ const courseSchema = new mongoose.Schema(
     },
     preRequisites: {
       type: [String],
+    },
+    banner: {
+      type: String,
+      required: true,
     },
   },
   {

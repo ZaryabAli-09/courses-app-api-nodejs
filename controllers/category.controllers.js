@@ -1,3 +1,4 @@
+import { uploadToCloudinary } from "../config/cloudinary.js";
 import { Category } from "../models/category.model.js";
 
 // create / post  category
@@ -28,12 +29,27 @@ const createCategory = async (req, res, next) => {
     } else {
       sortBy = 10;
     }
+    //  uploading file/image
+    if (!req.file) {
+      return res.status(404).json({
+        message: "Local file path not found please try again",
+      });
+    }
+    const bannerImageLocalPath = req.file?.path;
+
+    const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
+    if (!uploadImage) {
+      return res.status(400).json({
+        message: "Error occur while uploading image",
+      });
+    }
 
     const categorySaved = new Category({
       name: trimmedName,
       description: trimmedDescription,
       sortBy,
       activate,
+      banner: uploadImage.url,
     });
 
     // saving the body request information in db
