@@ -145,7 +145,7 @@ const signInUser = async (req, res) => {
 };
 
 // ......................................
-// only admin routes
+// only admin route
 // getting all users from the database that are register
 const getAllUsers = async (req, res) => {
   try {
@@ -168,6 +168,8 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+
+// only signed in users routes with valid tokens
 
 // delete user account
 const deleteUser = async (req, res) => {
@@ -206,4 +208,64 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-export { signUpUser, signInUser, getAllUsers, deleteUser };
+
+const changePasswordOfUser = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (password.length < 8) {
+      return res.status(400).json({
+        message: "Password must be 8 characters",
+      });
+    }
+    const userBrowserAccessToken = req.cookies.access_token;
+    if (!userBrowserAccessToken) {
+      return res.status(401).json({
+        message: "Unauthorized access! token not present",
+      });
+    }
+
+    const decodedAccessToken = jwt.verify(
+      userBrowserAccessToken,
+      process.env.JWT_ACCESS_TOKEN_SECRET_KEY
+    );
+
+    if (!decodedAccessToken) {
+      return res.status(401).json({
+        message: "Invalid access || Unauthorized",
+      });
+    }
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    const user = await User.findByIdAndUpdate(
+      decodedAccessToken.userId,
+      {
+        $set: {
+          password: hashedPassword,
+        },
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid Token || Unauthorized",
+      });
+    }
+    user.password = undefined;
+    return res.status(200).json({
+      user: user,
+      message: "User password successfully change.",
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
+export {
+  signUpUser,
+  signInUser,
+  getAllUsers,
+  deleteUser,
+  changePasswordOfUser,
+};

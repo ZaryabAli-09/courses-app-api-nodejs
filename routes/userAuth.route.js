@@ -4,6 +4,7 @@ import {
   signUpUser,
   getAllUsers,
   deleteUser,
+  changePasswordOfUser,
 } from "../controllers/userAuth.controllers.js";
 import { verifyUser } from "../middleswares/verifyUser.js";
 
@@ -14,5 +15,5 @@ router.post("/sign-in", signInUser);
 
 router.get("/get-all-users", verifyUser, getAllUsers);
 router.delete("/delete-user", deleteUser);
-
+router.put("/change-password", changePasswordOfUser);
 export default router;
