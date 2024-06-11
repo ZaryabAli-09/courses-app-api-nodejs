@@ -144,4 +144,66 @@ const signInUser = async (req, res) => {
   }
 };
 
-export { signUpUser, signInUser };
+// ......................................
+// only admin routes
+// getting all users from the database that are register
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (!users) {
+      res.status(400).json({
+        message: "Error occur while getting users",
+      });
+    }
+    const totalUsers = await User.countDocuments();
+
+    res.status(200).json({
+      users: users,
+      message: "Successfully get all users",
+      totalUsers: totalUsers,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
+// delete user account
+const deleteUser = async (req, res) => {
+  try {
+    const userBrowserAccessToken = req.cookies.access_token;
+    if (!userBrowserAccessToken) {
+      return res.status(401).json({
+        message: "Unauthorized access! token not present",
+      });
+    }
+
+    const decodedAccessToken = jwt.verify(
+      userBrowserAccessToken,
+      process.env.JWT_ACCESS_TOKEN_SECRET_KEY
+    );
+
+    if (!decodedAccessToken) {
+      return res.status(401).json({
+        message: "Invalid access || Unauthorized",
+      });
+    }
+
+    const user = await User.findByIdAndDelete(decodedAccessToken.userId);
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid Token || Unauthorized",
+      });
+    }
+    return res.status(200).json({
+      deletedUser: user,
+      message: `${user.username} successfully deleted`,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+export { signUpUser, signInUser, getAllUsers, deleteUser };
