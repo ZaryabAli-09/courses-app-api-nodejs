@@ -1,6 +1,6 @@
 import { Category } from "../models/category.model.js";
 import { Courses } from "../models/course.model.js";
-
+import { uploadToCloudinary } from "../config/cloudinary.js";
 const createCourse = async (req, res) => {
   try {
     let {
@@ -49,6 +49,21 @@ const createCourse = async (req, res) => {
     } else {
       sortBy = 10;
     }
+    // file/image upload
+    if (!req.file) {
+      return res.status(404).json({
+        message: "Local file path not found please try again",
+      });
+    }
+
+    const bannerImageLocalPath = req.file?.path;
+
+    const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
+    if (!uploadImage) {
+      return res.status(400).json({
+        message: "Error occur while uploading image",
+      });
+    }
 
     const savedCourse = Courses({
       title: trimmedTitle,
@@ -59,6 +74,7 @@ const createCourse = async (req, res) => {
       isPopular,
       price,
       preRequisites,
+      banner: uploadImage.url,
     });
 
     await savedCourse.save();
@@ -126,6 +142,21 @@ const updateCourse = async (req, res) => {
       preRequisites,
     } = req.body;
 
+    // update image
+    if (!req.file) {
+      return res.status(404).json({
+        message: "Local file path not found please try again",
+      });
+    }
+
+    const bannerImageLocalPath = req.file?.path;
+
+    const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
+    if (!uploadImage) {
+      return res.status(400).json({
+        message: "Error occur while uploading image",
+      });
+    }
     const updatedCourse = await Courses.findByIdAndUpdate(
       courseId,
       {
@@ -137,6 +168,7 @@ const updateCourse = async (req, res) => {
           isPopular,
           price,
           preRequisites,
+          banner: uploadImage.url,
         },
       },
       { new: true }

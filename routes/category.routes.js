@@ -21,6 +21,11 @@ router.post(
   verifyUser,
   createCategory
 );
-router.put("/update-category/:categoryId", verifyUser, updateCategory);
+router.put(
+  "/update-category/:categoryId",
+  uploadFileUsingMulter.single("banner"),
+  verifyUser,
+  updateCategory
+);
 
 export default router;

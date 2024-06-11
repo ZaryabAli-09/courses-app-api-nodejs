@@ -16,9 +16,6 @@ const createCategory = async (req, res, next) => {
     const trimmedName = name.trim();
     const trimmedDescription = description.trim();
 
-    // counting the total documents in category
-    // const totalCatgories = await Category.countDocuments();
-
     // sorting of categories
     const maxSortValue = await Category.findOne()
       .sort({ sortBy: -1 })
@@ -29,12 +26,14 @@ const createCategory = async (req, res, next) => {
     } else {
       sortBy = 10;
     }
+
     //  uploading file/image
     if (!req.file) {
       return res.status(404).json({
         message: "Local file path not found please try again",
       });
     }
+
     const bannerImageLocalPath = req.file?.path;
 
     const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
@@ -119,6 +118,22 @@ const updateCategory = async (req, res) => {
     const { name, description, sortBy, activate } = req.body;
     const { categoryId } = req.params;
 
+    // uploading and updating image
+    if (!req.file) {
+      return res.status(404).json({
+        message: "Local file path not found please try again",
+      });
+    }
+
+    const bannerImageLocalPath = req.file?.path;
+
+    const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
+    if (!uploadImage) {
+      return res.status(400).json({
+        message: "Error occur while uploading image",
+      });
+    }
+
     const updatedCategory = await Category.findByIdAndUpdate(
       categoryId,
       {
@@ -127,6 +142,7 @@ const updateCategory = async (req, res) => {
           description,
           sortBy,
           activate,
+          banner: uploadImage.url,
         },
       },
       { new: true }
