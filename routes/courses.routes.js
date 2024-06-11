@@ -11,10 +11,11 @@ import { verifyUser } from "../middleswares/verifyUser.js";
 
 const router = express.Router();
 
-router.post("/create-course", createCourse);
-router.get("/get-courses", verifyUser, getCourse);
+router.get("/get-courses", getCourse);
 router.get("/get-specific-course/:courseId", getSpecificCourse);
-router.put("/update-course/:courseId", updateCourse);
-router.delete("/delete-course/:courseId", deleteCourse);
+// protected routes only admin can access it
+router.post("/create-course", verifyUser, createCourse);
+router.put("/update-course/:courseId", verifyUser, updateCourse);
+router.delete("/delete-course/:courseId", verifyUser, deleteCourse);
 
 export default router;

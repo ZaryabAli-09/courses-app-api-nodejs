@@ -20,11 +20,6 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    avatar: {
-      type: String,
-      default:
-        "https://img.lovepik.com/png/20231019/customer-login-avatar-client-gray-head-portrait_269373_wh1200.png",
-    },
   },
   { timestamps: true }
 );
