@@ -1,0 +1,16 @@
+get specific course with help of categories id
+
+course contents of course 
+course id ,topic id, topic,detail,duration,sortby,active 
+
+
+
+general inquiry
+id:ObjectId, name:string, email:string, inquiry:string, new:boolean:bydefault=true, reply:boolean:bydefault=false, date
+
+
+all routes will be public
+/createGeneralInquiry
+/getGeneralInquiry
+/updateGeneralInquiry
+/deleteGeneralInquiry

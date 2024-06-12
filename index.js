@@ -3,6 +3,7 @@ import { dbConnection } from "./db/db.js";
 import categoryRouter from "./routes/category.routes.js";
 import coursesRouter from "./routes/courses.routes.js";
 import userAuthRouter from "./routes/userAuth.route.js";
+import generalInquiryRouter from "./routes/generalInquiry.routes.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use("/api/category", categoryRouter);
 app.use("/api/courses", coursesRouter);
 app.use("/api/auth", userAuthRouter);
+app.use("/api/generalInquiry", generalInquiryRouter);
 
 // if the request passes all the middleware without a response
 app.use((req, res, next) => {
