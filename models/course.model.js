@@ -39,9 +39,12 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // courseContent:[{
-    //  ?
-    // }]
+    courseContents: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CourseContents",
+      },
+    ],
   },
   {
     timestamps: true,

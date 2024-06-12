@@ -64,7 +64,7 @@ const createCourse = async (req, res) => {
         message: "Error occur while uploading image",
       });
     }
-
+    const courseContents = [];
     const savedCourse = Courses({
       title: trimmedTitle,
       category_id,
@@ -75,6 +75,7 @@ const createCourse = async (req, res) => {
       price,
       preRequisites,
       banner: uploadImage.url,
+      courseContents: courseContents,
     });
 
     await savedCourse.save();
@@ -94,7 +95,7 @@ const getCourse = async (req, res) => {
   try {
     const courses = await Courses.find({
       ...(req.query.popular && { isPopular: req.query.popular }),
-    });
+    }).populate("courseContents");
     const totalCourses = await Courses.countDocuments();
 
     return res.status(200).json({
