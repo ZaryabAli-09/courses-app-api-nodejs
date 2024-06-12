@@ -14,6 +14,7 @@ router.post("/sign-up", signUpUser);
 router.post("/sign-in", signInUser);
 
 router.get("/get-all-users", verifyUser, getAllUsers);
+
 router.delete("/delete-user", deleteUser);
 router.put("/change-password", changePasswordOfUser);
 export default router;

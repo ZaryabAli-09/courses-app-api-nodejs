@@ -3,6 +3,7 @@ import {
   createCourse,
   getCourse,
   getSpecificCourse,
+  getCategoryBasedCourses,
   updateCourse,
   deleteCourse,
 } from "../controllers/courses.controllers.js";
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.get("/get-courses", getCourse);
 router.get("/get-specific-course/:courseId", getSpecificCourse);
+router.get("/get-category-based-course/:categoryId", getCategoryBasedCourses);
 //protected routes only admin can access it
 router.post(
   "/create-course",
@@ -28,5 +30,6 @@ router.put(
   updateCourse
 );
 router.delete("/delete-course/:courseId", verifyUser, deleteCourse);
+// router.get("/get-specific-category-course",...........)
 
 export default router;

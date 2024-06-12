@@ -39,6 +39,9 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // courseContent:[{
+    //  ?
+    // }]
   },
   {
     timestamps: true,

@@ -115,7 +115,7 @@ const getSpecificCourse = async (req, res) => {
     const course = await Courses.findById(courseId);
     if (!course) {
       return res.status(404).json({
-        message: "We don't have this course.",
+        message: "We don't have this course",
       });
     }
     res.status(200).json({
@@ -129,6 +129,25 @@ const getSpecificCourse = async (req, res) => {
   }
 };
 
+const getCategoryBasedCourses = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const courses = await Courses.find({ category_id: categoryId });
+    if (!courses || courses.length <= 0) {
+      return res.status(404).json({
+        message: "We don't have courses",
+      });
+    }
+    res.status(200).json({
+      courses: courses,
+      message: "Successfully get specific general category course",
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
 const updateCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -175,7 +194,7 @@ const updateCourse = async (req, res) => {
     );
     if (!updateCourse) {
       return res.status(404).json({
-        message: "We don't have this course.",
+        message: "We don't have this course",
       });
     }
     res.status(200).json({
@@ -195,7 +214,7 @@ const deleteCourse = async (req, res) => {
   const deletedCourse = await Courses.findByIdAndDelete(courseId);
   if (!deletedCourse) {
     return res.status(404).json({
-      message: "We don't have this course.",
+      message: "We don't have this course",
     });
   }
   res.status(200).json({
@@ -207,6 +226,7 @@ export {
   createCourse,
   getCourse,
   getSpecificCourse,
+  getCategoryBasedCourses,
   updateCourse,
   deleteCourse,
 };
