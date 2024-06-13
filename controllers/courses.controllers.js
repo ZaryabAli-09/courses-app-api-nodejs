@@ -163,20 +163,20 @@ const updateCourse = async (req, res) => {
     } = req.body;
 
     // update image
-    if (!req.file) {
-      return res.status(404).json({
-        message: "Local file path not found please try again",
-      });
-    }
+    // if (!req.file) {
+    //   return res.status(404).json({
+    //     message: "Local file path not found please try again",
+    //   });
+    // }
 
     const bannerImageLocalPath = req.file?.path;
 
     const uploadImage = await uploadToCloudinary(bannerImageLocalPath);
-    if (!uploadImage) {
-      return res.status(400).json({
-        message: "Error occur while uploading image",
-      });
-    }
+    // if (!uploadImage) {
+    //   return res.status(400).json({
+    //     message: "Error occur while uploading image",
+    //   });
+    // }
     const updatedCourse = await Courses.findByIdAndUpdate(
       courseId,
       {
@@ -188,7 +188,7 @@ const updateCourse = async (req, res) => {
           isPopular,
           price,
           preRequisites,
-          banner: uploadImage.url,
+          banner: uploadImage?.url,
         },
       },
       { new: true }

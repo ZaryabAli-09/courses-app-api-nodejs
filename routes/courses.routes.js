@@ -14,9 +14,13 @@ import { verifyUser } from "../middleswares/verifyUser.js";
 const router = express.Router();
 
 router.get("/get-courses", getCourse);
-router.get("/get-specific-course/:courseId", getSpecificCourse);
-router.get("/get-category-based-course/:categoryId", getCategoryBasedCourses);
 //protected routes only admin can access it
+router.get("/get-specific-course/:courseId", verifyUser, getSpecificCourse);
+router.get(
+  "/get-category-based-course/:categoryId",
+  verifyUser,
+  getCategoryBasedCourses
+);
 router.post(
   "/create-course",
   uploadFileUsingMulter.single("banner"),
@@ -25,11 +29,10 @@ router.post(
 );
 router.put(
   "/update-course/:courseId",
-  uploadFileUsingMulter.single("banner"),
+  // uploadFileUsingMulter.single("banner"),
   verifyUser,
   updateCourse
 );
 router.delete("/delete-course/:courseId", verifyUser, deleteCourse);
-// router.get("/get-specific-category-course",...........)
 
 export default router;
