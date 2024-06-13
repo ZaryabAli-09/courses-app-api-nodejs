@@ -76,7 +76,7 @@ const updateGeneralInquiry = async (req, res) => {
       });
     }
     return res.status(200).json({
-      updateGeneralInquiry,
+      updatedGneralInquiry,
       message: "General inquiry successfully updated",
     });
   } catch (error) {
