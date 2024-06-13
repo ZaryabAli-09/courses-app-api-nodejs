@@ -1,28 +1,28 @@
 import mongoose from "mongoose";
 
-const courseContentSchema = new mongoose.Schema(
+const subjectInquirySchema = new mongoose.Schema(
   {
     course_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Courses",
     },
-    topic: {
+    username: {
       type: String,
       required: true,
     },
-    detail: {
+    email: {
       type: String,
       required: true,
     },
-    duration: {
+    message: {
       type: String,
       required: true,
     },
-    sortBy: {
-      type: Number,
-      default: 10,
+    isnew: {
+      type: Boolean,
+      default: true,
     },
-    activate: {
+    reply: {
       type: Boolean,
       default: false,
     },
@@ -30,6 +30,9 @@ const courseContentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const CourseContents = mongoose.model("CourseContents", courseContentSchema);
+const SubjectInquiries = mongoose.model(
+  "SubjectInquiries",
+  subjectInquirySchema
+);
 
-export { CourseContents };
+export { SubjectInquiries };

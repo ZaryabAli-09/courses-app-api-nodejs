@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// id:ObjectId, name:string, email:string, inquiry:string, new:boolean:bydefault=true, reply:boolean:bydefault=false, date
 
 const generalInquirySchema = new mongoose.Schema(
   {
