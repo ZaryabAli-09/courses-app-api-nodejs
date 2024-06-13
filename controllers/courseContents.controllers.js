@@ -46,13 +46,11 @@ const createCourseContent = async (req, res) => {
 
     await Courses.findByIdAndUpdate(course_id, {
       $push: { courseContents: courseContentId },
-    })
-      .then((updatedCourse) => {
-        console.log("course updated", updatedCourse);
-      })
-      .catch((err) => {
-        console.log(err);
+    }).catch((error) => {
+      return res.status(400).json({
+        message: error.message,
       });
+    });
 
     res.status(200).json({
       courseContent: savedCourseContents,
@@ -64,19 +62,100 @@ const createCourseContent = async (req, res) => {
     });
   }
 };
+const getCourseContents = async (req, res) => {
+  try {
+    const courseContents = await CourseContents.find();
+    const totalCourseContents = await CourseContents.countDocuments();
 
-const updateCourseContent = (req, res) => {
-  const { courseContent_id, course_id } = req.body;
-  const course = Courses.findOneAndUpdate(
-    course_id,
-    {
-      $push: {
-        courseContents: courseContent_id,
-      },
-    },
-    { new: true }
-  );
-  res.send("helllo");
+    if (courseContents.length <= 0) {
+      return res.status(404).json({
+        message: "No course contents",
+      });
+    }
+    res.status(200).json({
+      courseContents,
+      totalCourseContents,
+      message: "Successfully get all course contents",
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+const updateCourseContent = async (req, res) => {
+  try {
+    const { courseContentId } = req.params;
+    const updatedCourseContent = await CourseContents.findByIdAndUpdate(
+      courseContentId,
+      {
+        $set: {
+          ...req.body,
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Course content succesfully updated",
+      updatedCourseContent,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
 };
 
-export { createCourseContent, updateCourseContent };
+const deleteCourseContent = async (req, res) => {
+  try {
+    const { courseContentId } = req.params;
+
+    const courseContent = await CourseContents.findById(courseContentId);
+
+    if (!courseContent) {
+      return res.status(400).json({
+        message: "Did'nt find course content",
+      });
+    }
+
+    const course = await Courses.findById(courseContent.course_id);
+
+    if (!course) {
+      return res.status(400).json({
+        message: "Did'nt find course",
+      });
+    }
+
+    const courseContentsIndex = course.courseContents.indexOf(courseContentId);
+
+    if (courseContentsIndex !== -1) {
+      course.courseContents.splice(courseContentsIndex, 1);
+    }
+    await course.save();
+
+    const deletedCourseContent = await CourseContents.findByIdAndDelete(
+      courseContentId
+    );
+
+    if (!deletedCourseContent) {
+      return res.status(400).json({
+        message: "Error occur while deleting course content",
+      });
+    }
+
+    res.status(200).json({
+      message: "Course content successfully deleted",
+      deletedCourseContent,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
+export {
+  createCourseContent,
+  getCourseContents,
+  deleteCourseContent,
+  updateCourseContent,
+};

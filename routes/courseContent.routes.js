@@ -1,11 +1,27 @@
 import express from "express";
 import {
   createCourseContent,
-  //   updateCourseContent,
+  getCourseContents,
+  deleteCourseContent,
+  updateCourseContent,
 } from "../controllers/courseContents.controllers.js";
+import { verifyUser } from "../middleswares/verifyUser.js";
 
 const router = express.Router();
 
-router.post("/create-course-contents", createCourseContent);
-// router.put("/update", updateCourseContent);
+// all routes are protected in these restfull apis
+router.post("/create-course-contents", verifyUser, createCourseContent);
+router.get("/get-course-contents", verifyUser, getCourseContents);
+router.put(
+  "/update-course-content/:courseContentId",
+  verifyUser,
+  updateCourseContent
+);
+
+router.delete(
+  "/delete-course-content/:courseContentId",
+  verifyUser,
+  deleteCourseContent
+);
+
 export default router;
