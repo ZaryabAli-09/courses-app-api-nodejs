@@ -6,7 +6,7 @@ import {
   deleteGeneralInquiry,
 } from "../controllers/generalInquiry.controllers.js";
 
-import { verifyUser } from "../middleswares/verifyUser.js";
+import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 
 const router = express.Router();
 
@@ -16,12 +16,12 @@ router.get("/get-generalInquiries", getGeneralInquiries);
 // only admin routes
 router.put(
   "/update-generalInquiry/:generalInquiryId",
-  verifyUser,
+  verifyIsAdmin,
   updateGeneralInquiry
 );
 router.delete(
   "/delete-generalInquiry/:generalInquiryId",
-  verifyUser,
+  verifyIsAdmin,
   deleteGeneralInquiry
 );
 export default router;

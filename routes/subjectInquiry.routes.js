@@ -7,26 +7,26 @@ import {
   getSubjectInquiries,
 } from "../controllers/subjectInquiry.controllers.js";
 import { verifyOnlyUser } from "../middleswares/verifyOnlyUser.js";
-import { verifyUser } from "../middleswares/verifyUser.js";
+import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 const router = express.Router();
 
 router.post("/create-subject-inquiry", verifyOnlyUser, createSubjectInquiry);
 // admin routes
 router.put(
   "/update-subject-inquiry/:subjectInquiryId",
-  verifyUser,
+  verifyIsAdmin,
   updateSubjectInquiry
 );
 router.delete(
   "/delete-subject-inquiry/:subjectInquiryId",
-  verifyUser,
+  verifyIsAdmin,
   deleteSubjectInquiry
 );
 
-router.get("/get-subject-inquiries", verifyUser, getSubjectInquiries);
+router.get("/get-subject-inquiries", verifyIsAdmin, getSubjectInquiries);
 router.get(
   "/get-subject-inquiries-based-oncourses/:course_id",
-  verifyUser,
+  verifyIsAdmin,
   getSubjectInquiriesBasedOnCourse
 );
 

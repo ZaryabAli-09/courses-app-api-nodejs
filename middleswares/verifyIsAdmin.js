@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/userAuth.model.js";
 
-const verifyUser = async (req, res, next) => {
+const verifyIsAdmin = async (req, res, next) => {
   const userBrowserAccessToken = req.cookies.access_token;
   if (!userBrowserAccessToken) {
     return res.status(401).json({
@@ -31,4 +31,4 @@ const verifyUser = async (req, res, next) => {
   next();
 };
 
-export { verifyUser };
+export { verifyIsAdmin };

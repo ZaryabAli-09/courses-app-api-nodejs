@@ -9,30 +9,30 @@ import {
 } from "../controllers/courses.controllers.js";
 import { uploadFileUsingMulter } from "../middleswares/multer.middleware.js";
 
-import { verifyUser } from "../middleswares/verifyUser.js";
+import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 
 const router = express.Router();
 
 router.get("/get-courses", getCourse);
 //protected routes only admin can access it
-router.get("/get-specific-course/:courseId", verifyUser, getSpecificCourse);
+router.get("/get-specific-course/:courseId", verifyIsAdmin, getSpecificCourse);
 router.get(
   "/get-category-based-course/:categoryId",
-  verifyUser,
+  verifyIsAdmin,
   getCategoryBasedCourses
 );
 router.post(
   "/create-course",
   uploadFileUsingMulter.single("banner"),
-  verifyUser,
+  verifyIsAdmin,
   createCourse
 );
 router.put(
   "/update-course/:courseId",
   // uploadFileUsingMulter.single("banner"),
-  verifyUser,
+  verifyIsAdmin,
   updateCourse
 );
-router.delete("/delete-course/:courseId", verifyUser, deleteCourse);
+router.delete("/delete-course/:courseId", verifyIsAdmin, deleteCourse);
 
 export default router;

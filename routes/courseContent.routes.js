@@ -5,22 +5,22 @@ import {
   deleteCourseContent,
   updateCourseContent,
 } from "../controllers/courseContents.controllers.js";
-import { verifyUser } from "../middleswares/verifyUser.js";
+import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 
 const router = express.Router();
 
 // all routes are protected in these restfull apis
-router.post("/create-course-contents", verifyUser, createCourseContent);
-router.get("/get-course-contents", verifyUser, getCourseContents);
+router.post("/create-course-contents", verifyIsAdmin, createCourseContent);
+router.get("/get-course-contents", verifyIsAdmin, getCourseContents);
 router.put(
   "/update-course-content/:courseContentId",
-  verifyUser,
+  verifyIsAdmin,
   updateCourseContent
 );
 
 router.delete(
   "/delete-course-content/:courseContentId",
-  verifyUser,
+  verifyIsAdmin,
   deleteCourseContent
 );
 

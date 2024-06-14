@@ -6,15 +6,18 @@ import {
   deleteUser,
   changePasswordOfUser,
 } from "../controllers/userAuth.controllers.js";
-import { verifyUser } from "../middleswares/verifyUser.js";
+import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
+import { verifyOnlyUser } from "../middleswares/verifyOnlyUser.js";
 
 const router = express.Router();
 
 router.post("/sign-up", signUpUser);
 router.post("/sign-in", signInUser);
 
-router.get("/get-all-users", verifyUser, getAllUsers);
+// only admin route
+router.get("/get-all-users", verifyIsAdmin, getAllUsers);
 
-router.delete("/delete-user", deleteUser);
-router.put("/change-password", changePasswordOfUser);
+// registered users with valid tokens routes
+router.delete("/delete-user", verifyOnlyUser, deleteUser);
+router.put("/change-password", verifyOnlyUser, changePasswordOfUser);
 export default router;

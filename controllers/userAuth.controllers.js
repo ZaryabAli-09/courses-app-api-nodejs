@@ -174,25 +174,9 @@ const getAllUsers = async (req, res) => {
 // delete user account
 const deleteUser = async (req, res) => {
   try {
-    const userBrowserAccessToken = req.cookies.access_token;
-    if (!userBrowserAccessToken) {
-      return res.status(401).json({
-        message: "Unauthorized access! token not present",
-      });
-    }
+    const userLoggedIn = req.user;
 
-    const decodedAccessToken = jwt.verify(
-      userBrowserAccessToken,
-      process.env.JWT_ACCESS_TOKEN_SECRET_KEY
-    );
-
-    if (!decodedAccessToken) {
-      return res.status(401).json({
-        message: "Invalid access || Unauthorized",
-      });
-    }
-
-    const user = await User.findByIdAndDelete(decodedAccessToken.userId);
+    const user = await User.findByIdAndDelete(userLoggedIn._id);
     if (!user) {
       return res.status(401).json({
         message: "Invalid Token || Unauthorized",
@@ -217,27 +201,12 @@ const changePasswordOfUser = async (req, res) => {
         message: "Password must be 8 characters",
       });
     }
-    const userBrowserAccessToken = req.cookies.access_token;
-    if (!userBrowserAccessToken) {
-      return res.status(401).json({
-        message: "Unauthorized access! token not present",
-      });
-    }
+    const userLoggedIn = req.user;
 
-    const decodedAccessToken = jwt.verify(
-      userBrowserAccessToken,
-      process.env.JWT_ACCESS_TOKEN_SECRET_KEY
-    );
-
-    if (!decodedAccessToken) {
-      return res.status(401).json({
-        message: "Invalid access || Unauthorized",
-      });
-    }
     const hashedPassword = bcryptjs.hashSync(password, 10);
 
     const user = await User.findByIdAndUpdate(
-      decodedAccessToken.userId,
+      userLoggedIn._id,
       {
         $set: {
           password: hashedPassword,
@@ -261,6 +230,7 @@ const changePasswordOfUser = async (req, res) => {
     });
   }
 };
+//$2a$10$VJ8.rxXexNNpDlatUCCQku4Z7N8b/hVyCvGQvNTJXT3ePLTh.JC2u
 
 export {
   signUpUser,
