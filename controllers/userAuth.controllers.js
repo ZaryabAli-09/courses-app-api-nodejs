@@ -230,7 +230,6 @@ const changePasswordOfUser = async (req, res) => {
     });
   }
 };
-//$2a$10$VJ8.rxXexNNpDlatUCCQku4Z7N8b/hVyCvGQvNTJXT3ePLTh.JC2u
 
 export {
   signUpUser,

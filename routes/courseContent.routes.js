@@ -9,9 +9,9 @@ import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 
 const router = express.Router();
 
-// all routes are protected in these restfull apis
+router.get("/get-course-contents", getCourseContents);
+// protected routes
 router.post("/create-course-contents", verifyIsAdmin, createCourseContent);
-router.get("/get-course-contents", verifyIsAdmin, getCourseContents);
 router.put(
   "/update-course-content/:courseContentId",
   verifyIsAdmin,

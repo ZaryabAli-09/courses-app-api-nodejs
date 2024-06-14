@@ -12,13 +12,9 @@ import { uploadFileUsingMulter } from "../middleswares/multer.middleware.js";
 const router = express.Router();
 
 router.get("/get-categories", getCategories);
+router.get("/get-specific-category/:categoryId", getSpecificCategory);
 
 // protected routes only amdin can access it
-router.get(
-  "/get-specific-category/:categoryId",
-  verifyIsAdmin,
-  getSpecificCategory
-);
 router.post(
   "/create-category",
   uploadFileUsingMulter.single("banner"),
