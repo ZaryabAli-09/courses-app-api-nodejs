@@ -1,7 +1,6 @@
-import jwt from "jsonwebtoken";
 import { User } from "../models/userAuth.model.js";
-
-const verifyUser = async (req, res, next) => {
+import jwt from "jsonwebtoken";
+const verifyOnlyUser = async (req, res, next) => {
   const userBrowserAccessToken = req.cookies.access_token;
   if (!userBrowserAccessToken) {
     return res.status(401).json({
@@ -14,9 +13,9 @@ const verifyUser = async (req, res, next) => {
     process.env.JWT_ACCESS_TOKEN_SECRET_KEY
   );
 
-  if (!decodedAccessToken.admin || !decodedAccessToken) {
+  if (!decodedAccessToken) {
     return res.status(401).json({
-      message: "Invalid access | only admin can access theses routes",
+      message: "Invalid access || Unauthorized",
     });
   }
 
@@ -27,8 +26,8 @@ const verifyUser = async (req, res, next) => {
     });
   }
 
-  console.log("valid admin access");
+  console.log("valid access");
+  req.user = user;
   next();
 };
-
-export { verifyUser };
+export { verifyOnlyUser };

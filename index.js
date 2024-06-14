@@ -5,6 +5,7 @@ import coursesRouter from "./routes/courses.routes.js";
 import userAuthRouter from "./routes/userAuth.route.js";
 import generalInquiryRouter from "./routes/generalInquiry.routes.js";
 import courseContentsRouter from "./routes/courseContent.routes.js";
+import subjectInquiryRouter from "./routes/subjectInquiry.routes.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
@@ -24,6 +25,7 @@ app.use("/api/courses", coursesRouter);
 app.use("/api/auth", userAuthRouter);
 app.use("/api/generalInquiry", generalInquiryRouter);
 app.use("/api/courseContents", courseContentsRouter);
+app.use("/api/subjectInquiry", subjectInquiryRouter);
 
 // if the request passes all the middleware without a response
 app.use((req, res, next) => {
