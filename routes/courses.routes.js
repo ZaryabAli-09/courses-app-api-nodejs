@@ -1,7 +1,7 @@
 import express from "express";
 import {
   createCourse,
-  getCourse,
+  getAllCourses,
   getSpecificCourse,
   getCategoryBasedCourses,
   updateCourse,
@@ -13,7 +13,7 @@ import { verifyIsAdmin } from "../middleswares/verifyIsAdmin.js";
 
 const router = express.Router();
 
-router.get("/get-courses", getCourse);
+router.get("/get-all-courses", getAllCourses);
 
 router.get("/get-specific-course/:courseId", getSpecificCourse);
 router.get("/get-category-based-course/:categoryId", getCategoryBasedCourses);

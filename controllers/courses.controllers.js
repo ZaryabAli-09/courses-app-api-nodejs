@@ -65,6 +65,11 @@ const createCourse = async (req, res) => {
       });
     }
     const courseContents = [];
+    const slug = title
+      .split(" ")
+      .join("-")
+      .toLowerCase()
+      .replace(/[^a-zA-z0-9-]/g, "-");
     const savedCourse = Courses({
       title: trimmedTitle,
       category_id,
@@ -73,6 +78,7 @@ const createCourse = async (req, res) => {
       activate,
       isPopular,
       price,
+      slug,
       preRequisites,
       banner: uploadImage.url,
       courseContents: courseContents,
@@ -91,11 +97,17 @@ const createCourse = async (req, res) => {
   }
 };
 
-const getCourse = async (req, res) => {
+const getAllCourses = async (req, res) => {
   try {
     const courses = await Courses.find({
       ...(req.query.popular && { isPopular: req.query.popular }),
-    }).populate("courseContents");
+      ...(req.query.activate && { activate: req.query.activate }),
+      ...(req.query.slug && { slug: req.query.slug }),
+      ...(req.query.categoryId && { category_id: req.query.categoryId }),
+    })
+      .populate("category_id")
+      .populate("courseContents");
+
     const totalCourses = await Courses.countDocuments();
 
     return res.status(200).json({
@@ -225,7 +237,7 @@ const deleteCourse = async (req, res) => {
 };
 export {
   createCourse,
-  getCourse,
+  getAllCourses,
   getSpecificCourse,
   getCategoryBasedCourses,
   updateCourse,

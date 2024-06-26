@@ -39,6 +39,11 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     courseContents: [
       {
         type: mongoose.Schema.Types.ObjectId,
